@@ -845,6 +845,11 @@ export interface ApiExpenseExpense extends Schema.CollectionType {
       'api::sub-category.sub-category'
     >;
     date: Attribute.DateTime;
+    users_permissions_user: Attribute.Relation<
+      'api::expense.expense',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

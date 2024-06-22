@@ -839,12 +839,12 @@ export interface ApiExpenseExpense extends Schema.CollectionType {
       'oneToOne',
       'api::category.category'
     >;
-    sub_categories: Attribute.Relation<
+    sub_category: Attribute.Relation<
       'api::expense.expense',
-      'oneToMany',
+      'oneToOne',
       'api::sub-category.sub-category'
     >;
-    date: Attribute.DateTime;
+    date: Attribute.Date;
     users_permissions_user: Attribute.Relation<
       'api::expense.expense',
       'oneToOne',

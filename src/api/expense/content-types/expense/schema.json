@@ -26,13 +26,13 @@
       "relation": "oneToOne",
       "target": "api::category.category"
     },
-    "sub_categories": {
+    "sub_category": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "api::sub-category.sub-category"
     },
     "date": {
-      "type": "datetime"
+      "type": "date"
     },
     "users_permissions_user": {
       "type": "relation",

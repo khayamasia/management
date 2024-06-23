@@ -6,48 +6,54 @@
 
 const { createCoreController } = require("@strapi/strapi").factories;
 
-module.exports = createCoreController("api::expense.expense");
+module.exports = createCoreController("api::expense.expense", ({ strapi }) => ({
+  getAll: async (ctx, next) => {
+    const userId = ctx.state.user.id;
 
-// "use strict";
+    // Retrieve pagination parameters from the query string, with defaults
+    const { page = "1", pageSize = "10" } = ctx.params;
+    // Convert page and pageSize to numbers
+    const pageNumber = Number(page);
+    const pageSizeNumber = Number(pageSize);
 
-// /**
-//  * expense controller
-//  */
+    // Calculate the offset index
+    const offset = (pageNumber - 1) * pageSizeNumber;
 
-// const { createCoreController } = require("@strapi/strapi").factories;
+    // Perform the query with pagination
+    const [data, total] = await Promise.all([
+      strapi.db.query("api::expense.expense").findMany({
+        populate: {
+          category: true,
+          sub_category: true,
+        },
+        where: {
+          users_permissions_user: {
+            id: userId,
+          },
+        },
+        offset: offset,
+        limit: pageSizeNumber,
+      }),
+      strapi.db.query("api::expense.expense").count({
+        where: {
+          users_permissions_user: {
+            id: userId,
+          },
+        },
+      }),
+    ]);
 
-// module.exports = createCoreController("api::expense.expense", ({ strapi }) => ({
-//   // Override the find method
-//   async find(ctx) {
-//     // Get the authenticated user's ID
-
-//     const userId = ctx.state.user.id;
-//     // console.log("userId", userId);
-//     const data = await strapi.db.query("api::expense.expense").findMany({
-//       populate: {
-//         category: true,
-//         sub_category: true,
-//       },
-//       where: {
-//         users_permissions_user: {
-//           id: userId,
-//         },
-//       },
-//     });
-//     // const data = await strapi.db.query("api::expense.expense").findMany({
-//     //   select: ["*"],
-//     //   where: {
-//     //     users_permissions_user: {
-//     //       id: userId,
-//     //     },
-//     //   },
-//     //   populate: {
-//     //     category: true,
-//     //     sub_category: true,
-//     //   },
-//     // });
-//     // Return the response
-//     console.log(data);
-//     return { data };
-//   },
-// }));
+    // Return the data along with pagination meta information
+    return {
+      data,
+      meta: {
+        pagination: {
+          page: pageNumber,
+          pageSize: pageSizeNumber,
+          pageCount: Math.ceil(total / pageSizeNumber),
+          total,
+        },
+      },
+    };
+  },
+}));

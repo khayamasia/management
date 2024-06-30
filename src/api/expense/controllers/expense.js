@@ -24,7 +24,7 @@ module.exports = createCoreController("api::expense.expense", ({ strapi }) => ({
       strapi.db.query("api::expense.expense").findMany({
         populate: {
           category: true,
-          sub_category: true,
+          name: true,
         },
         where: {
           users_permissions_user: {

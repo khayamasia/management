@@ -33,6 +33,7 @@ module.exports = createCoreController("api::expense.expense", ({ strapi }) => ({
         },
         offset: offset,
         limit: pageSizeNumber,
+        orderBy: [{ createdAt: "desc" }],
       }),
       strapi.db.query("api::expense.expense").count({
         where: {

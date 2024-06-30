@@ -12,9 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "name": {
-      "type": "string"
-    },
     "price": {
       "type": "integer"
     },
@@ -26,11 +23,6 @@
       "relation": "oneToOne",
       "target": "api::category.category"
     },
-    "sub_category": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::sub-category.sub-category"
-    },
     "date": {
       "type": "date"
     },
@@ -38,6 +30,11 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "name": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::name.name"
     }
   }
 }

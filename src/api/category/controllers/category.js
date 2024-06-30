@@ -14,6 +14,7 @@ module.exports = createCoreController(
         "api::category.category",
         {
           fields: ["id", "name"],
+          sort: { createdAt: "desc" },
         }
       );
       console.log(data);

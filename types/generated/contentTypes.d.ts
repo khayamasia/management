@@ -831,7 +831,6 @@ export interface ApiExpenseExpense extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String;
     price: Attribute.Integer;
     comment: Attribute.String;
     category: Attribute.Relation<
@@ -839,16 +838,16 @@ export interface ApiExpenseExpense extends Schema.CollectionType {
       'oneToOne',
       'api::category.category'
     >;
-    sub_category: Attribute.Relation<
-      'api::expense.expense',
-      'oneToOne',
-      'api::sub-category.sub-category'
-    >;
     date: Attribute.Date;
     users_permissions_user: Attribute.Relation<
       'api::expense.expense',
       'oneToOne',
       'plugin::users-permissions.user'
+    >;
+    name: Attribute.Relation<
+      'api::expense.expense',
+      'oneToOne',
+      'api::name.name'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -868,6 +867,29 @@ export interface ApiExpenseExpense extends Schema.CollectionType {
   };
 }
 
+export interface ApiNameName extends Schema.CollectionType {
+  collectionName: 'names';
+  info: {
+    singularName: 'name';
+    pluralName: 'names';
+    displayName: 'name';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::name.name', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::name.name', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface ApiSubCategorySubCategory extends Schema.CollectionType {
   collectionName: 'sub_categories';
   info: {
@@ -880,12 +902,6 @@ export interface ApiSubCategorySubCategory extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String;
-    category: Attribute.Relation<
-      'api::sub-category.sub-category',
-      'oneToOne',
-      'api::category.category'
-    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -924,6 +940,7 @@ declare module '@strapi/types' {
       'plugin::i18n.locale': PluginI18NLocale;
       'api::category.category': ApiCategoryCategory;
       'api::expense.expense': ApiExpenseExpense;
+      'api::name.name': ApiNameName;
       'api::sub-category.sub-category': ApiSubCategorySubCategory;
     }
   }

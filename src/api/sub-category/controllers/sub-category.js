@@ -26,10 +26,10 @@ module.exports = createCoreController(
               id: categoryId,
             },
           },
+          sort: { createdAt: "desc" },
         }
       );
-      console.log(categoryId);
-      console.log(data);
+
       return {
         data,
       };
